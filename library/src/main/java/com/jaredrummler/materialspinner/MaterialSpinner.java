@@ -64,6 +64,7 @@ public class MaterialSpinner extends TextView {
   private int popupWindowMaxHeight;
   private int popupWindowHeight;
   private int selectedIndex;
+  private long selectedId;
   private int backgroundColor;
   private int arrowColor;
   private int arrowColorDisabled;
@@ -142,6 +143,7 @@ public class MaterialSpinner extends TextView {
           position++;
         }
         selectedIndex = position;
+        selectedId = id;
         nothingSelected = false;
         Object item = adapter.get(position);
         adapter.notifyItemSelected(position);
@@ -293,6 +295,11 @@ public class MaterialSpinner extends TextView {
       if (position >= 0 && position <= adapter.getCount()) {
         adapter.notifyItemSelected(position);
         selectedIndex = position;
+        Object item = adapter.get(position);
+        if (onItemSelectedListener != null) {
+          //noinspection unchecked
+          onItemSelectedListener.onItemSelected(this, position, selectedId, item);
+        }
         setText(adapter.get(position).toString());
       } else {
         throw new IllegalArgumentException("Position must be lower than adapter count!");
